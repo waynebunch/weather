@@ -1,0 +1,110 @@
+
+<!DOCTYPE html><html class=''>
+<head><script src='//production-assets.codepen.io/assets/editor/live/console_runner-5710c30fb566082d9fcb6e7d97ee7e3f2a326128c9f334a4231b6fd752b29965.js'></script><script src='//production-assets.codepen.io/assets/editor/live/events_runner-d5e4bf42585b8da8c18f7d963dbfc17cd66a79aa586c9448c4de8d6952ee9d97.js'></script><script src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-25d1423d5d6fb975e7d61832d2c061422a94963ca446583b965dfc5569147311.js'></script><meta charset='UTF-8'><meta name="robots" content="noindex"><link rel="shortcut icon" type="image/x-icon" href="//production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" /><link rel="mask-icon" type="" href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" /><link rel="canonical" href="http://codepen.io/waynebunch/pen/RRPPEb" />
+<script language="JavaScript" src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
+
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+<style class="cp-pen-styles">@import url(https://fonts.googleapis.com/css?family=Audiowide);
+
+.vertical-center {
+  min-height:100%;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+}
+
+#container {
+  border:1px solid black;
+  background-color: black;
+  color:white;
+}
+
+#name {
+  font-family:Audiowide;
+  font-size: 45px;
+}
+
+div {
+  font-family:Audiowide;
+  font-size: 15px;
+}
+
+#name {
+
+}</style></head><body>
+<div class="jumbotron vertical-center">
+  <div class="container text-center" id="container">
+    <div id='name'></div>
+    <div id='temp'></div>
+    <div id='clouds'></div>
+    <div id='skiesIcon'></div>
+    <div id='wind'></div>
+    <div id='temp_min'></div>
+    <div id='temp_max'></div>
+  </div>
+</div>
+<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-58d22c749295bca52f487966e382a94a495ac103faca9206cbd160bdf8aedf2a.js'></script><script src='https://code.jquery.com/jquery-2.2.4.min.js'></script><script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script>$(document).ready(function () {
+    var lat = geoplugin_latitude();
+    var lon = geoplugin_longitude();
+    var location = 'http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&APPID=376ff1bf03729c6ff40e70f0e709c2d3&units=imperial';
+    var skiesIcon = '';
+    var fnt = parseInt(fnt, 10) + '\xB0F';
+    var celcius = parseInt(celcius, 10);
+    var tempMax = parseInt(tempMax, 10);
+    var tempMin = parseInt(tempMax, 10);
+    var fntMin = parseInt(fntMin, 10);
+    var celciusMin = parseInt(celciusMin, 10);
+    var fntMax = parseInt(fntMax, 10);
+    var celciusMax = parseInt(celciusMax, 10);
+    $.ajax({
+        url: location,
+        async: false,
+        datatype: 'json',
+        success: function (result) {
+            console.log(result);
+            skiesIcon = result.weather[0].icon;
+            var temp = Math.round(result.main.temp) + '\xB0F';
+            fnt = Math.round(result.main.temp);
+            celcius = Math.round((fnt - 32) * 5 / 9);
+            console.log(celcius);
+            var clouds = result.weather[0].description;
+            var wind = 'Wind: ' + Math.round(result.wind.speed) + ' MPH';
+            var name = result.name + ',' + result.sys.country;
+            var tempMin = 'Low: ' + Math.round(result.main.temp_min) + '\xB0F';
+            var tempMax = 'High: ' + Math.round(result.main.temp_max) + '\xB0F';
+            fntMin = Math.round(result.main.temp_min);
+            celciusMin = Math.round((fntMin - 32) * 5 / 9);
+            fntMax = Math.round(result.main.temp_max);
+            celciusMax = Math.round((fntMax - 32) * 5 / 9);
+            $('#temp').append(temp);
+            $('#clouds').append(clouds);
+            $('#wind').append(wind);
+            $('#name').append(name);
+            $('#temp_min').append(tempMin);
+            $('#temp_max').append(tempMax);
+        }
+    });
+    document.getElementById('skiesIcon').innerHTML = '<img src="http://openweathermap.org/img/w/' + skiesIcon + '.png">';
+    $('#temp').mouseover(function () {
+        document.getElementById('temp').innerHTML = celcius + '\xB0C';
+        $(this).mouseleave(function () {
+            document.getElementById('temp').innerHTML = fnt + '\xB0F';
+        });
+    });
+    $('#temp_min').mouseover(function () {
+        document.getElementById('temp_min').innerHTML = 'Low: ' + celciusMin + '\xB0C';
+        $(this).mouseleave(function () {
+            document.getElementById('temp_min').innerHTML = 'Low: ' + fntMin + '\xB0F';
+        });
+    });
+    $('#temp_max').mouseover(function () {
+        document.getElementById('temp_max').innerHTML = 'High: ' + celciusMax + '\xB0C';
+        $(this).mouseleave(function () {
+            document.getElementById('temp_max').innerHTML = 'High: ' + fntMax + '\xB0F';
+        });
+    });
+});
+//# sourceURL=pen.js
+</script>
+</body></html>
